@@ -3,7 +3,7 @@ package dev.java10x.CadastroDeNinjas.Ninjas;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
+@RequestMapping("ninjas")
 public class NinjaController {
 // mapeia rotas
     //@GetMapping serve para mostrar algo na tela GET
@@ -18,7 +18,7 @@ public class NinjaController {
         return "Ninja criado";
     }
 
-    //mostrar todos os ninjas   (read)
+    //mostrar todos os ninjas (read)
     @GetMapping("/todos")
     public String mostrarTodosOsNinjas(){
         return "Mostrar Ninjas";
