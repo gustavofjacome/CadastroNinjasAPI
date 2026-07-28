@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ninjahub
+    runtime: docker
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: JAVA_VERSION
+        value: "21"
+      - key: PORT
+        value: 8080

@@ -1,0 +1,180 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 50
+skinparam padding 5
+skinparam defaultFontSize 12
+
+skinparam class {
+  BackgroundColor #FEFEFE
+  BorderColor #333333
+  ArrowColor #555555
+  HeaderBackgroundColor #F5F5F5
+  FontSize 13
+}
+
+skinparam enum {
+  BackgroundColor #FFF8E1
+  BorderColor #FFB300
+}
+
+skinparam note {
+  BackgroundColor #FFFDE7
+  BorderColor #FBC02D
+}
+
+title Diagrama de Classes - Ninja Hub
+
+package "Entities" <<Rectangle>> {
+  class NinjaModel {
+    - id : Long
+    - nome : String
+    - email : String
+    - idade : int
+    - img_url : String
+    - rank : Rank
+    --
+    <<JPA Entity>>
+    <<@Data, @NoArgsConstructor>>
+  }
+
+  class MissaoModel {
+    - id : Long
+    - nomeMissao : String
+    - dificuldadeMissao : Dificuldade
+    --
+    <<JPA Entity>>
+    <<@Data, @NoArgsConstructor>>
+  }
+}
+
+package "DTO" <<Rectangle>> {
+  class NinjaDTO {
+    - id : Long
+    - nome : String
+    - email : String
+    - idade : int
+    - img_url : String
+    - rank : Rank
+    - missoes : MissaoModel
+    --
+    <<@Data>>
+  }
+}
+
+package "Enumerations" <<Rectangle>> {
+  enum Dificuldade {
+    RANK_A
+    RANK_B
+    RANK_C
+    RANK_D
+    RANK_E
+  }
+
+  enum Rank {
+    INICIANTE
+    INTERMEDIARIO
+    EXPERIENTE
+    VETERANO
+    ELITE
+    LENDA
+  }
+}
+
+package "Repositories" <<Rectangle>> {
+  interface NinjaRepository {
+    <<Spring Data JPA>>
+  }
+
+  interface MissaoRepository {
+    <<Spring Data JPA>>
+  }
+}
+
+package "Services" <<Rectangle>> {
+  class NinjaService {
+    - ninjaRepository : NinjaRepository
+    - ninjaMapper : NinjaMapper
+    --
+    + listarNinjas() : List<NinjaDTO>
+    + listarNinjaId(id) : NinjaDTO
+    + criarNinja(ninjaDTO) : NinjaDTO
+    + atualizarNinja(id, ninjaDTO) : NinjaDTO
+    + deletarPorId(id) : void
+  }
+
+  class MissaoService {
+    - missaoRepository : MissaoRepository
+    --
+    + listarMissoes() : List<MissaoModel>
+    + listarMissaoId(id) : MissaoModel
+    + criarMissao(missao) : MissaoModel
+    + alterarMissao(id, missao) : MissaoModel
+    + deletarMissao(id) : void
+  }
+}
+
+package "Controllers" <<Rectangle>> {
+  class NinjaController {
+    - ninjaService : NinjaService
+    --
+    + boasVindas() : String
+    + criarNinja(ninjaDTO) : ResponseEntity
+    + mostrarTodosOsNinjas() : ResponseEntity
+    + mostrarNinjaPorId(id) : ResponseEntity
+    + alterarNinjaPorId(id, ninjaDTO) : ResponseEntity
+    + deletarNinjaPorId(id) : ResponseEntity
+  }
+
+  class MissaoController {
+    - missaoService : MissaoService
+    --
+    + listarTodasMissoes() : ResponseEntity
+    + listarMissaoPorId(id) : ResponseEntity
+    + criarMissao(missao) : ResponseEntity
+    + alterarMissao(id, missao) : ResponseEntity
+    + deletarMissao(id) : ResponseEntity
+  }
+
+  class WebController {
+    - ninjaService : NinjaService
+    - missaoService : MissaoService
+    - missaoRepository : MissaoRepository
+    --
+    + index(model) : String
+    + listarNinjas(model) : String
+    + cadastrarNinja(model) : String
+    + salvarNinja(...) : String
+    + editarNinja(id, model) : String
+    + atualizarNinja(...) : String
+    + deletarNinja(id) : String
+    + listarMissoes(model) : String
+    + cadastrarMissao(model) : String
+    + salvarMissao(...) : String
+    + editarMissao(id, model) : String
+    + atualizarMissao(...) : String
+    + deletarMissao(id) : String
+  }
+}
+
+NinjaModel "0..*" --> "0..1" MissaoModel : missoes
+NinjaModel --> Rank : rank
+NinjaDTO "0..*" --> "0..1" MissaoModel : missoes
+MissaoModel "0..*" --> "0..*" NinjaModel : ninjas
+MissaoModel --> Dificuldade : dificuldadeMissao
+
+NinjaRepository <|.. NinjaModel
+MissaoRepository <|.. MissaoModel
+
+NinjaService --> NinjaRepository
+NinjaService --> NinjaDTO : usa
+MissaoService --> MissaoRepository
+
+NinjaController --> NinjaService
+MissaoController --> MissaoService
+WebController --> NinjaService
+WebController --> MissaoService
+WebController --> MissaoRepository
+
+@enduml
