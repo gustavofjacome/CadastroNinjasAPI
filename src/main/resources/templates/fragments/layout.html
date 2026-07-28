@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | Ninja Hub'">Ninja Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<nav th:fragment="navbar" class="navbar">
+    <a th:href="@{/web/}" class="brand">
+        <span class="brand-icon">N</span>
+        <span class="brand-ninja">Ninja</span>Hub
+    </a>
+    <ul class="nav-links">
+        <li><a th:href="@{/web/}" th:classappend="${activePage == 'home'} ? ' active' : ''">Início</a></li>
+        <li><a th:href="@{/web/ninjas}" th:classappend="${activePage == 'ninjas'} ? ' active' : ''">Ninjas</a></li>
+        <li><a th:href="@{/web/missoes}" th:classappend="${activePage == 'missoes'} ? ' active' : ''">Missões</a></li>
+    </ul>
+    <div class="nav-api">
+        <a th:href="@{/swagger-ui.html}" target="_blank">API</a>
+        <a th:href="@{/h2-console}" target="_blank">Console</a>
+    </div>
+</nav>
+
+<footer th:fragment="footer" class="footer">
+    Ninja Hub &copy; 2026
+</footer>
+
+</body>
+</html>

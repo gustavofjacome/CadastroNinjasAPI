@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastrar Ninja')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+
+    <div class="page-header">
+        <h2 class="page-title" th:text="${ninjaDTO.id != null} ? 'Editar Ninja' : 'Cadastrar Ninja'">
+            Cadastrar <span class="accent">Ninja</span>
+        </h2>
+    </div>
+
+    <div class="form-card">
+        <form th:action="${ninjaDTO.id != null} ? @{/web/ninjas/editar/{id}(id=${ninjaDTO.id})} : @{/web/ninjas/cadastrar}"
+              method="post">
+
+            <div class="form-group">
+                <label class="form-label">Nome</label>
+                <input type="text" class="form-control" name="nome"
+                       th:value="${ninjaDTO.nome}" placeholder="Nome completo" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email"
+                       th:value="${ninjaDTO.email}" placeholder="exemplo@email.com" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Idade</label>
+                    <input type="number" class="form-control" name="idade"
+                           th:value="${ninjaDTO.idade}" min="0" placeholder="0" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rank</label>
+                    <select class="form-select" name="rank" required>
+                        <option value="">Selecione...</option>
+                        <option th:each="rank : ${ranks}" th:value="${rank}" th:text="${rank}"
+                                th:selected="${ninjaDTO.rank != null and ninjaDTO.rank == rank}">Rank</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">URL da Imagem</label>
+                <input type="url" class="form-control" name="img_url"
+                       th:value="${ninjaDTO.img_url}" placeholder="https://exemplo.com/foto.jpg">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Missão</label>
+                <select class="form-select" name="missaoId">
+                    <option value="">Nenhuma missão</option>
+                    <option th:each="missao : ${missoes}" th:value="${missao.id}" th:text="${missao.nomeMissao}"
+                            th:selected="${ninjaDTO.missoes != null and ninjaDTO.missoes.id != null and ninjaDTO.missoes.id == missao.id}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary"
+                        th:text="${ninjaDTO.id != null} ? 'Salvar Alterações' : 'Cadastrar Ninja'">Cadastrar</button>
+                <a th:href="@{/web/ninjas}" class="btn btn-ghost">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

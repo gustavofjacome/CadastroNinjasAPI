@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cadastrar Missão')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+
+    <div class="page-header">
+        <h2 class="page-title" th:text="${missao != null and missao.id != null} ? 'Editar Missão' : 'Cadastrar Missão'">
+            Cadastrar <span class="accent">Missão</span>
+        </h2>
+    </div>
+
+    <div class="form-card">
+        <form th:action="${missao != null and missao.id != null} ? @{/web/missoes/editar/{id}(id=${missao.id})} : @{/web/missoes/cadastrar}"
+              method="post">
+
+            <div class="form-group">
+                <label class="form-label">Nome da Missão</label>
+                <input type="text" class="form-control" name="nomeMissao"
+                       th:value="${missao != null} ? ${missao.nomeMissao} : ''"
+                       placeholder="Nome da missão" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Dificuldade</label>
+                <select class="form-select" name="dificuldadeMissao" required>
+                    <option value="">Selecione...</option>
+                    <option th:each="d : ${dificuldades}" th:value="${d}" th:text="${d}"
+                            th:selected="${missao != null and missao.dificuldadeMissao != null and missao.dificuldadeMissao == d}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary"
+                        th:text="${missao != null and missao.id != null} ? 'Salvar Alterações' : 'Cadastrar Missão'">Cadastrar</button>
+                <a th:href="@{/web/missoes}" class="btn btn-ghost">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

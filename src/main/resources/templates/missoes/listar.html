@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Missões')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+
+    <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+
+    <div class="page-header">
+        <h2 class="page-title">Todas as <span class="accent">Missões</span></h2>
+        <a th:href="@{/web/missoes/cadastrar}" class="btn btn-primary">+ Nova Missão</a>
+    </div>
+
+    <div th:if="${!missoes.isEmpty()}" class="table-wrap">
+        <table class="table-custom">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Dificuldade</th>
+                    <th style="width: 150px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="missao : ${missoes}">
+                    <td th:text="${missao.id}">1</td>
+                    <td><strong th:text="${missao.nomeMissao}">Missão</strong></td>
+                    <td>
+                        <span class="badge" th:text="${missao.dificuldadeMissao}"
+                              th:class="'badge diff-' + ${missao.dificuldadeMissao}">RANK_A</span>
+                    </td>
+                    <td>
+                        <div class="ninja-actions" style="border: none; padding: 0; margin: 0;">
+                            <a th:href="@{/web/missoes/editar/{id}(id=${missao.id})}" class="btn btn-edit btn-sm">Editar</a>
+                            <a th:href="@{/web/missoes/deletar/{id}(id=${missao.id})}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Tem certeza que deseja deletar esta missão?')">Deletar</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${missoes.isEmpty()}" class="empty-state">
+        <div class="empty-state-icon">&#x1F3AF;</div>
+        <div class="empty-state-title">Nenhuma missão cadastrada</div>
+        <p class="empty-state-text">Crie uma missão para começar.</p>
+        <a th:href="@{/web/missoes/cadastrar}" class="btn btn-primary">+ Criar Missão</a>
+    </div>
+
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
