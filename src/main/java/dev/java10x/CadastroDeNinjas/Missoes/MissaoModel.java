@@ -1,10 +1,12 @@
 package dev.java10x.CadastroDeNinjas.Missoes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.java10x.CadastroDeNinjas.Ninjas.NinjaModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -13,15 +15,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MissaoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+    private Long id;
 
-   private String nomeMissao;
-   private Dificuldade dificuldadeMissao;
+    private String nomeMissao;
 
-   @OneToMany(mappedBy = "missoes") // uma missao pode ter vários ninjas
-   private List<NinjaModel> ninjas;
+    @Enumerated(EnumType.STRING)
+    private Dificuldade dificuldadeMissao;
 
+    @OneToMany(mappedBy = "missoes")
+    @JsonIgnore
+    private List<NinjaModel> ninjas;
 }

@@ -1,21 +1,23 @@
 package dev.java10x.CadastroDeNinjas.Ninjas;
 
-
 import dev.java10x.CadastroDeNinjas.Missoes.MissaoModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Entity // transforma uma classe em uma entidade do banco de dados
-@Table(name = "tb_cadastro") // convensao = tb_nome
+@Entity
+@Table(name = "tb_cadastro")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@ToString(exclude = "missoes")
 public class NinjaModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // nao precisa estar no contrutor, pois gera automaticamente
+    private Long id;
+
     private String nome;
 
     @Column(unique = true)
@@ -23,9 +25,13 @@ public class NinjaModel {
 
     private int idade;
 
-    @ManyToOne // um ninja tem uma unica missao
-    @JoinColumn(name = "missoes_id") //Foreing Key ou chave estrangeira
+    private String img_url;
+
+    @ManyToOne
+    @JoinColumn(name = "missoes_id")
     private MissaoModel missoes;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rank")
+    private Rank rank;
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Início')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>Bem-vindo ao <span class="accent">Ninja</span>Hub</h1>
+        <p>Gerencie seus ninjas e missões em um só lugar</p>
+    </div>
+
+    <div class="stats-grid">
+        <a th:href="@{/web/ninjas}" class="stat-card">
+            <div class="stat-icon">&#x1F396;</div>
+            <div class="stat-number" th:text="${totalNinjas}">0</div>
+            <div class="stat-label">Ninjas Cadastrados</div>
+        </a>
+        <a th:href="@{/web/missoes}" class="stat-card">
+            <div class="stat-icon">&#x1F3AF;</div>
+            <div class="stat-number" th:text="${totalMissoes}">0</div>
+            <div class="stat-label">Missões Disponíveis</div>
+        </a>
+    </div>
+
+    <div class="page-header">
+        <h2 class="page-title">Ninjas <span class="accent">Recentes</span></h2>
+        <a th:href="@{/web/ninjas/cadastrar}" class="btn btn-primary">+ Novo Ninja</a>
+    </div>
+
+    <div th:if="${!ninjas.isEmpty()}" class="ninja-grid">
+        <div class="ninja-card" th:each="ninja : ${ninjas}">
+            <div class="ninja-header">
+                <img th:if="${ninja.img_url != null and !ninja.img_url.isEmpty()}"
+                     th:src="${ninja.img_url}" alt="" class="ninja-avatar">
+                <div th:unless="${ninja.img_url != null and !ninja.img_url.isEmpty()}"
+                     class="ninja-avatar-placeholder">&#x1F977;</div>
+                <div class="ninja-header-text">
+                    <div class="ninja-name" th:text="${ninja.nome}">Nome</div>
+                    <div class="ninja-email" th:text="${ninja.email}">email</div>
+                </div>
+            </div>
+            <div class="ninja-meta">
+                <span class="ninja-meta-item" th:text="'Idade: ' + ${ninja.idade}">Idade: 0</span>
+                <span class="badge" th:if="${ninja.rank != null}" th:text="${ninja.rank}" th:class="'badge rank-' + ${ninja.rank}">Rank</span>
+            </div>
+            <div class="ninja-missao" th:if="${ninja.missoes != null}">
+                &#x1F3AF; <span th:text="${ninja.missoes.nomeMissao}">Missão</span>
+            </div>
+            <div class="ninja-actions">
+                <a th:href="@{/web/ninjas/editar/{id}(id=${ninja.id})}" class="btn btn-edit btn-sm">Editar</a>
+                <a th:href="@{/web/ninjas/deletar/{id}(id=${ninja.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Tem certeza que deseja deletar este ninja?')">Deletar</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${ninjas.isEmpty()}" class="empty-state">
+        <div class="empty-state-icon">&#x1F977;</div>
+        <div class="empty-state-title">Nenhum ninja cadastrado</div>
+        <p class="empty-state-text">Comece criando seu primeiro ninja.</p>
+        <a th:href="@{/web/ninjas/cadastrar}" class="btn btn-primary">+ Criar Ninja</a>
+    </div>
+
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
